@@ -1,6 +1,6 @@
 # Debian setup
 
-These are instructions on how I've setup my personal debian 12 installation. These actions are for after the installation with no grapical environment and `standard system utilities` installed. This assumes your user is `tygoe` (me).
+These are instructions on how I've setup my personal debian 12 installation. These actions are for after the installation with no grapical environment and `standard system utilities` installed. This assumes your user is `tygoe` (me), but _tries_ to avoid usernames.
 
 ## Install and configure sudo
 
@@ -16,7 +16,7 @@ su tygoe
 ## Make shutdown and reboot available
 
 ```shell
-sudo nano /etc/profile # Add /sbin to PATH
+sudo nano /etc/profile #- Add /sbin to PATH
 sudo chown root:root /sbin/reboot /sbin/shutdown
 sudo chmod +s /sbin/reboot /sbin/shutdown
 ```
@@ -41,19 +41,69 @@ sudo apt install tint2 volumeicon-alsa cbatticon
 
 # Drivers and compatibility
 sudo apt install pulseaudio network-manager-gnome xcompmgr ibus
-sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol
+sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common bash-completion
 
 # Other apps
 sudo apt install rclone feh obs-studio
 
-# Programing
-sudo apt install python3-pip python3-venv curl git
+# VSCode
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
+# Programming
+sudo apt install python3-pip python3-venv git code
 ```
 
 Reboot for some of these to complete their installation
 
 ## Configure the packages
 
+Before anything else, clone this repo:
+
+```shell
+git clone https://github.com/tygoee/tygoee
+```
+
+### _openbox_
+
+```shell
+# Install the theme
+mkdir -p ~/.themes
+git clone https://github.com/ju1464/E5150_Themes
+cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
+
+# Set the configurations
+mkdir -p ~/.config/openbox/
+
+# Get the image
+wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
+
+# Copy the scripts
+cp tygoee/scripts/autostart ~/.config/openbox/
+
+# Warning: change this file for your monitor layout, if you only have one monitor, leave it empty
+cp tygoee/scripts/monitors.sh ~/.config/openbox/
+chmod +x ~/.config/openbox/monitors.sh
+
+# TODO: Dark theme in .config/gtk-3.0/
+```
+
+### _tint2_
+
+```shell
+# Make a tint2 config directory
+mkdir -p ~/.config/tint2/
+
+# Copy the tint2rc file
+cp tygoee/configs/tint2rc ~/.config/tint2/
+```
+
 ### _alacritty_
 
 WIP...
+
+<!-- How I installed from gnome-look.org:
+mkdir -p ~/.themes/
+curl -Lfs https://www.gnome-look.org/p/1330547/loadFiles | jq -r '.files | first.version as $v | .[] | select(.version == $v).url' | perl -pe 's/\%(\w\w)/chr hex $1/ge' | grep "E5150-Blue" | xargs wget
+tar -xf E5150-Blue.tar.gz -C ~/.themes/
+-->

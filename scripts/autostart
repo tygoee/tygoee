@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Load all monitors
+~/.config/openbox/monitors.sh
+
+# Load a background image
+feh --bg-fill ~/.config/openbox/background.jpg
+
+# Load the compositor
+xcompmgr &
+
+# Load the taskbar and tray icons
+tint2 &
+nm-applet &
+volumeicon &
+cbatticon &
+ibus-daemon -drx &
+
+# Load the policykit
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
