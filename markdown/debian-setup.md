@@ -30,7 +30,7 @@ startx # If it doesn't work, reboot
 
 ## Install nice packages
 
-Exit openbox first, and then:
+Exit openbox first, and then install all packages. You can use [scripts/install_pkgs.sh](../scripts/install_pkgs.sh) or install them yourself:
 
 ```shell
 # Browser, terminal, file manager
