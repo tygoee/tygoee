@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<submenu></submenu>
+	<unique-id>1693598420050313-1</unique-id>
+	<command>alacritty --working-directory %f</command>
+	<description>Open terminal in the current directory</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+    <icon></icon>
+    <name>Open in VSCode as root</name>
+    <submenu></submenu>
+    <unique-id>1693598281321375-2</unique-id>
+    <command>code %f --no-sandbox --user-data-dir /root/.config/Code</command>
+    <description></description>
+    <range>*</range>
+    <patterns>*</patterns>
+    <audio-files/>
+    <image-files/>
+    <other-files/>
+    <text-files/>
+    <video-files/>
+</action>
+</actions>

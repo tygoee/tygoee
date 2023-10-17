@@ -41,13 +41,13 @@ sudo apt install tint2 volumeicon-alsa cbatticon
 
 # Drivers and compatibility
 sudo apt install pulseaudio network-manager-gnome xcompmgr ibus
-sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common bash-completion
+sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion
 
 # Other apps
 sudo apt install rclone feh obs-studio
 
 # VSCode
-wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
 sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 
 # Programming
@@ -64,6 +64,13 @@ Before anything else, clone this repo:
 git clone https://github.com/tygoee/tygoee
 ```
 
+And copy all config files:
+
+```shell
+cp -r tygoee/configs/home/* ~/
+sudo cp -r tygoee/configs/root/* /root/
+```
+
 ### _openbox_
 
 ```shell
@@ -72,30 +79,15 @@ mkdir -p ~/.themes
 git clone https://github.com/ju1464/E5150_Themes
 cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 
-# Set the configurations
-mkdir -p ~/.config/openbox/
-
-# Get the image
+# Download the image=
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
 
-# Copy the scripts
-cp tygoee/scripts/autostart ~/.config/openbox/
+# Add WINIT_SCALE_FACTOR to ~/.profile
+echo "export WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
 
-# Warning: change this file for your monitor layout, if you only have one monitor, leave it empty
-cp tygoee/scripts/monitors.sh ~/.config/openbox/
+# Warning: change this file for your monitor layout,
+# if you only have one monitor, make the file empty
 chmod +x ~/.config/openbox/monitors.sh
-
-# TODO: Dark theme in .config/gtk-3.0/
-```
-
-### _tint2_
-
-```shell
-# Make a tint2 config directory
-mkdir -p ~/.config/tint2/
-
-# Copy the tint2rc file
-cp tygoee/configs/tint2rc ~/.config/tint2/
 ```
 
 ### _alacritty_
