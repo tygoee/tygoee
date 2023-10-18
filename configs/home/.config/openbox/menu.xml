@@ -16,9 +16,9 @@
     <action name="Execute"><execute>firefox-esr</execute></action>
   </item>
   <!-- This requires the presence of the 'obamenu' package to work -->
-  <menu id="/Debian" />
   <separator />
   <menu id="applications-menu" label="Applications" execute="/usr/bin/obamenu"/>
+  <menu id="/Debian" />
   <separator />
   <item label="ObConf">
     <action name="Execute"><execute>obconf</execute></action>

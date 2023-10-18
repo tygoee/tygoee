@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Version 1.1.7
+# ---- config ---
+import glob
+user = __import__('getpass').getuser()
+applications_dirs = (
+    "/usr/share/applications",
+    f"/home/{user}/.local/share/applications",
+)
+
+# without "pixmaps" -/usr/local/share in FreeBSD, /usr/share on linux
+image_dir_bases = ("/usr/share", f"/home/{user}/.local/share")
+icon_Theme = "hicolor"
+image_cat_prefix = "applications-"  # if empty will create no icon text only menu
+application_groups = ("Office",  "Development",  "Graphics", "Internet",
+                      "Games", "System",  "Multimedia",  "Utilities",  "Settings")
+group_aliases = {"Audio": "Multimedia", "AudioVideo": "Multimedia",
+                 "Network": "Internet", "Game": "Games", "Utility": "Utilities", "GTK": "",  "GNOME": ""}
+ignoreList = ()
+# your favourites terminal exec string
+terminal_string = "alacritty --command"
+simpleOBheader = False  # print full xml style OB header
+# --- End of user config ---
+
+
+class dtItem(object):
+    def __init__(self, fName: str) -> None:
+        self.fileName = fName
+        self.Name = ""
+        self.Comment = ""
+        self.Exec = ""
+        self.Terminal = None
+        self.Type = ""
+        self.Icon = ""
+        self.Categories = ()
+
+    def addName(self, data: str) -> None:
+        self.Name = xescape(data)
+
+    def addComment(self, data: str) -> None:
+        self.Comment = data
+
+    def addExec(self, data: str) -> None:
+        # get rid of filemanager arguments in dt files
+        if len(data) > 3 and data[-2] == '%':
+            data = data[:-2].strip()
+        self.Exec = data
+
+    def addIcon(self, data: str, snapDir: str = '') -> None:
+        self.Icon = ""
+        if image_cat_prefix == "":
+            return
+
+        image_dirs: list[str] = []
+        for image_dir_base in image_dir_bases:
+            image_dirs.extend([image_dir_base + "/pixmaps/",
+                               image_dir_base + "/icons/hicolor/symbolic/apps/",
+                               image_dir_base + "/icons/hicolor/scalable/apps/"])
+            for n in [512, 256, 192, 160, 128, 96, 72, 64, 48, 36, 32, 24, 22, 16]:
+                image_dirs.append(
+                    image_dir_base + f"/icons/hicolor/{n}x{n}/apps/")
+        for image_dir in image_dirs:
+            di = data.strip()
+            # print(di)
+            if len(di) < 3:
+                # "Error in %s: Invalid or no icon '%s'" % (self.fileName,  di)
+                return
+
+            if '${SNAP}' in di:
+                tmp = glob.glob(di.format(SNAP=snapDir).replace('$', ''))
+                if len(tmp) > 0:
+                    self.Icon = tmp[0]
+                    return
+            dix = di.find("/")	  # is it a full path?
+            # yes, its a path (./path or ../path or /path ...)
+            if dix >= 0 and dix <= 2:
+                self.Icon = di
+                return
+            # else a short name like "myapp"
+            tmp = image_dir + di + ".*"
+            tmp = glob.glob(tmp)
+            if len(tmp) > 0:
+                self.Icon = tmp[0]
+        return
+
+    def addTerminal(self, data: str) -> None:
+        if data == "True" or data == "true":
+            self.Terminal = True
+        else:
+            self.Terminal = False
+
+    def addType(self, data: str) -> None:
+        self.Type = data
+
+    def addCategories(self, data: list[str]) -> None:
+        self.Categories = data
+
+
+def getCatIcon(cat: str) -> str:
+    iconDir = image_dir_bases[0] + "/icons/" + icon_Theme + "/categories/24/"
+    cat = image_cat_prefix + cat.lower()
+    tmp = glob.glob(iconDir + cat + ".*")
+    if len(tmp) > 0:
+        return tmp[0]
+    return ""
+
+
+def xescape(s: str) -> str:
+    Rep = {"&": "&amp;", "<": "&lt;", ">": "&gt;",
+           "'": "&apos;", "\"": "&quot;"}
+    for p in ("&", "<", ">",  "'", "\""):
+        sl = len(s)
+        last = -1
+        while last < sl:
+            i = s.find(p,  last+1)
+            if i < 0:
+                break
+            last = i
+            l = s[:i]
+            r = s[i+1:]
+            s = l + Rep[p] + r
+    return s
+
+
+def process_category(cat: str, curCats: list[str], appGroups: tuple[str, ...] = application_groups,
+                     aliases: dict[str, str] = group_aliases) -> str:
+    # first process aliases
+    if cat in aliases:
+        if aliases[cat] == "":
+            return ""  # ignore this one
+        cat = aliases[cat]
+    if cat in appGroups and cat not in curCats:  # valid categories only and no doublettes, please
+        curCats.append(cat)
+        return cat
+    return ""
+
+
+# process this file & extract relevant info
+def process_dtfile(dtf: str, catDict: dict[str, list[dtItem]], snapDir: str = '') -> None:
+    active = False  # parse only after "[Desktop Entry]" line
+    fh = open(dtf,  "r")
+    lines = fh.readlines()
+    this = dtItem(dtf)
+    for l in lines:
+        l = l.strip()
+        if l == "[Desktop Entry]":
+            active = True
+            continue
+        if active == False:  # we don't care about licenses or other comments
+            continue
+        if len(l) < 1 or l[0] == '#':
+            continue
+        if l[0] == '[' and l != "[Desktop Entry]":
+            active = False
+            continue
+        # else
+        eqi = l.split('=')
+        if len(eqi) < 2:
+            print("Error: Invalid .desktop line'" + l + "'")
+            continue
+        # Check what it is ...
+        if eqi[0] == "NoDisplay" and eqi[1]:
+            return
+        if eqi[0] == "Name":
+            this.addName(eqi[1])
+        elif eqi[0] == "Comment":
+            this.addComment(eqi[1])
+        elif eqi[0] == "Exec":
+            this.addExec(eqi[1])
+        elif eqi[0] == "Icon":
+            this.addIcon(eqi[1], snapDir)
+        elif eqi[0] == "Terminal":
+            this.addTerminal(eqi[1])
+        elif eqi[0] == "Type":
+            if eqi[1] != "Application":
+                continue
+            this.addType(eqi[1])
+        elif eqi[0] == "Categories":
+            if eqi[1] and eqi[1][-1] == ';':
+                eqi[1] = eqi[1][0:-1]
+            cats = []
+            # DEBUG
+            dtCats = eqi[1].split(';')
+            for cat in dtCats:
+                _result = process_category(cat, cats)
+            this.addCategories(cats)
+        else:
+            continue
+    # add to catDict
+    # this.dprint()
+    if len(this.Categories) > 0:  # don't care about stuff w/o category
+        for cat in this.Categories:
+            catDict[cat].append(this)
+
+
+categoryDict: dict[str, list[dtItem]] = {}
+
+if __name__ == "__main__":
+    # init the application group dict (which will contain list of apps)
+    for appGroup in application_groups:
+        categoryDict[appGroup] = []
+
+    # now let's look  into the app dirs ...
+    for appDir in applications_dirs:
+        # check all files recursively
+        dtFiles = set(glob.glob(appDir + "/**/*.desktop",
+                      recursive=True) + glob.glob(appDir + "/*.desktop"))
+
+        # process each .desktop file in dir
+        for dtf in dtFiles:
+            skipFlag = False
+            for ifn in ignoreList:
+                if dtf.find(ifn) >= 0:
+                    skipFlag = True
+            if skipFlag == False:
+                process_dtfile(dtf, categoryDict)
+
+    # look in the snap dirs
+    for snapDir in glob.glob('/snap/*'):
+        snapDir += '/[0-9]*'
+        dtFiles = glob.glob(snapDir + '/meta/gui/*.desktop')
+
+        # process each .desktop file in dir
+        for dtf in dtFiles:
+            skipFlag = False
+            for ifn in ignoreList:
+                if dtf.find(ifn) >= 0:
+                    skipFlag = True
+            if skipFlag == False:
+                process_dtfile(dtf, categoryDict, snapDir)
+
+    # now, generate jwm menu include
+    if simpleOBheader == True:  # type: ignore
+        print('<openbox_pipe_menu>')  # magic header
+    else:
+        print('<?xml version="1.0" encoding="UTF-8" ?><openbox_pipe_menu xmlns="http://openbox.org/"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://openbox.org/" >')	   # magic header
+    appGroupLen = len(application_groups)
+    for ag in range(appGroupLen):
+        catList = categoryDict[application_groups[ag]]
+        if len(catList) < 1:
+            continue  # don't create empty menus
+        catStr = "<menu id=\"openbox-%s\" label=\"%s\" " % (
+            application_groups[ag], application_groups[ag])
+        tmp = getCatIcon(application_groups[ag])
+        if tmp != "":
+            catStr += "icon=\"%s\"" % tmp
+        print(catStr,  ">")
+        for app in catList:
+            progStr = "<item "
+            progStr += "label=\"%s\" " % app.Name
+            if app.Icon != "":
+                progStr += "icon=\"%s\" " % app.Icon
+            progStr += "><action name=\"Execute\"><command><![CDATA["
+            if app.Terminal == True:
+                progStr += terminal_string + " "
+            progStr += "%s]]></command></action></item>" % app.Exec
+            print(progStr)
+        print("</menu>")
+    print("</openbox_pipe_menu>")  # magic footer
+    pass  # done/debug break

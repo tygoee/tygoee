@@ -1,6 +1,6 @@
 # Debian setup
 
-These are instructions on how I've setup my personal debian 12 installation. These actions are for after the installation with no grapical environment and `standard system utilities` installed. This assumes your user is `tygoe` (me), but _tries_ to avoid usernames.
+These are instructions on how I've setup my personal debian 12 installation. These actions are for after the installation with no grapical environment and `standard system utilities` installed. This assumes your user is `tygoe` (me), but _tries_ to avoid usernames. Also enable 3D acceleration in Virtualbox.
 
 ## Install and configure sudo
 
@@ -47,8 +47,9 @@ sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wge
 sudo apt install rclone feh obs-studio
 
 # VSCode
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc
 sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt update # Update the package list
 
 # Programming
 sudo apt install python3-pip python3-venv git code
@@ -67,8 +68,8 @@ git clone https://github.com/tygoee/tygoee
 And copy all config files:
 
 ```shell
-cp -r tygoee/configs/home/* ~/
-sudo cp -r tygoee/configs/root/* /root/
+cp -r tygoee/configs/home/. ~/
+sudo cp -r tygoee/configs/root/. /root/
 ```
 
 ### _openbox_
@@ -84,6 +85,9 @@ wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden
 
 # Add WINIT_SCALE_FACTOR to ~/.profile
 echo "export WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
+
+# Use the enhanced obamenu (backup the existing one)
+sudo mv tygoee/scripts/obamenu /usr/bin/obamenu
 
 # Warning: change this file for your monitor layout,
 # if you only have one monitor, make the file empty
