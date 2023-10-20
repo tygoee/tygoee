@@ -88,10 +88,6 @@ echo "export WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
 
 # Use the enhanced obamenu (backup the existing one)
 sudo mv tygoee/scripts/obamenu /usr/bin/obamenu
-
-# Warning: change this file for your monitor layout,
-# if you only have one monitor, make the file empty
-chmod +x ~/.config/openbox/monitors.sh
 ```
 
 ### _alacritty_

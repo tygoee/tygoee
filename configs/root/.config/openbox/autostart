@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Load all monitors
-~/.config/openbox/monitors.sh
+# Uncomment to Load all monitors
+# ~/.config/openbox/monitors.sh
 
 # Load a background image
 feh --bg-fill ~/.config/openbox/background.jpg
