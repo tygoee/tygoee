@@ -106,3 +106,8 @@ mkdir -p ~/.themes/
 curl -Lfs https://www.gnome-look.org/p/1330547/loadFiles | jq -r '.files | first.version as $v | .[] | select(.version == $v).url' | perl -pe 's/\%(\w\w)/chr hex $1/ge' | grep "E5150-Blue" | xargs wget
 tar -xf E5150-Blue.tar.gz -C ~/.themes/
 -->
+
+<!--
+Test commit, to see if this commit
+turns out verified or not
+-->
