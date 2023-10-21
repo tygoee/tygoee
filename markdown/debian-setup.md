@@ -92,6 +92,13 @@ sudo mv tygoee/scripts/obamenu /usr/bin/obamenu
 
 ### _alacritty_
 
+```shell
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50
+sudo update-alternatives --config x-terminal-emulator
+```
+
+### _network_manager_
+
 WIP...
 
 <!-- How I installed from gnome-look.org:
