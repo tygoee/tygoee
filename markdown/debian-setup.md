@@ -99,7 +99,14 @@ sudo update-alternatives --config x-terminal-emulator
 
 ### _network_manager_
 
-WIP...
+```shell
+sudo nano /etc/network/interfaces #- comment out the last 4 lines
+sudo systemctl enable NetworkManager.service
+reboot
+nmtui #- Connect the network
+```
+
+... (WIP)
 
 <!-- How I installed from gnome-look.org:
 mkdir -p ~/.themes/
