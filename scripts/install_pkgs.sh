@@ -8,7 +8,7 @@ sudo apt install -y tint2 volumeicon-alsa cbatticon
 
 # Drivers and compatibility
 sudo apt install -y pulseaudio network-manager-gnome xcompmgr ibus
-sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion
+sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common libnotify-cil-dev at-spi2-core bash-completion
 
 # Other apps
 sudo apt install -y rclone feh obs-studio
