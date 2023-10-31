@@ -7,11 +7,11 @@ sudo apt install -y firefox-esr alacritty thunar
 sudo apt install -y tint2 volumeicon-alsa cbatticon
 
 # Drivers and compatibility
-sudo apt install -y pulseaudio network-manager-gnome xcompmgr ibus
-sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common libnotify-cil-dev at-spi2-core bash-completion
+sudo apt install -y pulseaudio network-manager-gnome ibus
+sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion
 
 # Other apps
-sudo apt install -y rclone feh obs-studio bitwarden copyq
+sudo apt install -y rclone feh obs-studio copyq
 
 # VSCode
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc
@@ -20,3 +20,11 @@ sudo apt update # Update the package list
 
 # Programming
 sudo apt install -y python3-pip python3-venv git code
+
+cd ~/Downloads || null
+
+wget "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" -O bitwarden.deb
+sudo apt install ./bitwarden.deb
+
+wget https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.deb -O discord.deb
+sudo apt install ./discord.deb
