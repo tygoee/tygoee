@@ -11,7 +11,7 @@ sudo apt install -y pulseaudio network-manager-gnome xcompmgr ibus
 sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common libnotify-cil-dev at-spi2-core bash-completion
 
 # Other apps
-sudo apt install -y rclone feh obs-studio
+sudo apt install -y rclone feh obs-studio bitwarden copyq
 
 # VSCode
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc

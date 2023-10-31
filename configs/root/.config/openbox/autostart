@@ -15,6 +15,7 @@ nm-applet &
 volumeicon &
 cbatticon &
 ibus-daemon -drx &
+bitwarden &
 
 # Load the policykit
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &

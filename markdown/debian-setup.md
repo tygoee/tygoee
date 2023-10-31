@@ -44,7 +44,7 @@ sudo apt install pulseaudio network-manager-gnome xcompmgr ibus
 sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core libnotify-cil-dev bash-completion
 
 # Other apps
-sudo apt install rclone feh obs-studio
+sudo apt install rclone feh obs-studio bitwarden copyq
 
 # VSCode
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc
