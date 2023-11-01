@@ -89,7 +89,7 @@ mkdir -p ~/.themes
 git clone https://github.com/ju1464/E5150_Themes
 cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 
-# Download the image=
+# Download the image
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
 
 # Add WINIT_SCALE_FACTOR to ~/.profile
