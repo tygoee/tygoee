@@ -41,10 +41,10 @@ sudo apt install tint2 volumeicon-alsa cbatticon
 
 # Drivers and compatibility
 sudo apt install pulseaudio network-manager-gnome ibus
-sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion
+sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion picom
 
 # Other apps
-sudo apt install rclone feh obs-studio copyq gdebi
+sudo apt install rclone feh obs-studio copyq gdebi thunderbird
 
 # VSCode
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc
@@ -93,10 +93,22 @@ cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
 
 # Add WINIT_SCALE_FACTOR to ~/.profile
-echo "export WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
+echo -e "\nexport WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
 
 # Use the enhanced obamenu (backup the existing one)
-sudo mv tygoee/scripts/obamenu /usr/bin/obamenu
+sudo cp tygoee/scripts/obamenu /usr/bin/obamenu
+
+# Enable 'tap to click'
+sudo su
+mkdir -p /etc/X11/xorg.conf.d
+echo 'Section "InputClass"
+        Identifier "libinput touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+        Option "Tapping" "on"
+EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
+su tygoe
 ```
 
 ### _alacritty_
@@ -113,6 +125,15 @@ sudo nano /etc/network/interfaces #- comment out the last 4 lines
 sudo systemctl enable NetworkManager.service
 reboot
 nmtui #- Connect the network
+```
+
+### _git_
+
+```shell
+git config --global user.name tygoee
+git config --global user.email tygoee@outlook.com
+git config --global user.signingkey YOUR_SIGNING_KEY
+git config --global commit.gpgsign true
 ```
 
 ... (WIP)

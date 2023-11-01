@@ -24,7 +24,7 @@ sudo apt install -y python3-pip python3-venv git code
 cd ~/Downloads || null
 
 wget "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" -O bitwarden.deb
-sudo apt install ./bitwarden.deb
+sudo apt install ./bitwarden.deb -y
 
 wget https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.deb -O discord.deb
-sudo apt install ./discord.deb
+sudo apt install ./discord.deb -y
