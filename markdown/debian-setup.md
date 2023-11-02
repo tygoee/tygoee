@@ -2,6 +2,25 @@
 
 These are instructions on how I've setup my personal debian 12 installation. These actions are for after the installation with no grapical environment and `standard system utilities` installed. This assumes your user is `tygoe` (me), but _tries_ to avoid usernames. Also enable 3D acceleration in Virtualbox.
 
+#### To do this faster:
+
+- Install and configure sudo
+- Make shutdown and root available
+- Do the rest with automated scripts:
+
+```shell
+git clone https://github.com/tygoee/tygoee
+cd tygoee
+
+# Install packages
+sudo apt install xorg openbox
+./scripts/install_pkgs.sh
+
+# Setup everything
+./scripts/setup-0.sh # this will reboot
+./scripts/setup-1.sh # requires user interaction
+```
+
 ## Install and configure sudo
 
 ```shell
@@ -41,7 +60,7 @@ sudo apt install tint2 volumeicon-alsa cbatticon
 
 # Drivers and compatibility
 sudo apt install pulseaudio network-manager-gnome ibus
-sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion picom
+sudo apt install xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion picom debian-keyring debian-archive-keyring apt-transport-https
 
 # Other apps
 sudo apt install rclone feh obs-studio copyq gdebi thunderbird
@@ -54,14 +73,15 @@ sudo apt update # Update the package list
 # Programming
 sudo apt install python3-pip python3-venv git code
 
-# Bitwarden and discord
-cd ~/Downloads
+# Some non-default-apt apps
+wget "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" -P ~/Downloads/bitwarden.deb
+sudo apt install ~/Downloads/bitwarden.deb
 
-wget "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" -O bitwarden.deb
-sudo apt install ./bitwarden.deb
+wget https://discord.com/api/download?platform=linux\&format=deb -O ~/Downloads/discord.deb
+sudo apt install ~/Downloads/discord.deb
 
-wget https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.deb -O discord.deb
-sudo apt install ./discord.deb
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+sudo apt install speedtest
 ```
 
 Reboot for some of these to complete their installation
@@ -86,8 +106,7 @@ sudo cp -r tygoee/configs/root/. /root/
 ```shell
 # Install the theme
 mkdir -p ~/.themes
-git clone https://github.com/ju1464/E5150_Themes
-cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
+git clone https://github.com/ju1464/E5150_Themes ~/.themes/
 
 # Download the image
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
@@ -99,7 +118,6 @@ echo -e "\nexport WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
 sudo cp tygoee/scripts/obamenu /usr/bin/obamenu
 
 # Enable 'tap to click'
-sudo su
 mkdir -p /etc/X11/xorg.conf.d
 echo 'Section "InputClass"
         Identifier "libinput touchpad catchall"
@@ -107,8 +125,7 @@ echo 'Section "InputClass"
         MatchDevicePath "/dev/input/event*"
         Driver "libinput"
         Option "Tapping" "on"
-EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
-su tygoe
+EndSection' | sudo tee /etc/X11/xorg.conf.d/40-libinput.conf
 ```
 
 ### _alacritty_
@@ -121,7 +138,7 @@ sudo update-alternatives --config x-terminal-emulator
 ### _network_manager_
 
 ```shell
-sudo nano /etc/network/interfaces #- comment out the last 4 lines
+sudo sed -i 's/^/# /' "/etc/network/interfaces"
 sudo systemctl enable NetworkManager.service
 reboot
 nmtui #- Connect the network
@@ -134,6 +151,32 @@ git config --global user.name tygoee
 git config --global user.email tygoee@outlook.com
 git config --global user.signingkey YOUR_SIGNING_KEY
 git config --global commit.gpgsign true
+```
+
+### _nvidia-driver_
+
+```shell
+sudo add-apt-repository contrib non-free
+sudo apt install nvidia-drivers
+reboot
+```
+
+### _rclone_
+
+```shell
+mkdir ~/OneDrive
+rclone config #- Fill in everything (needs GUI)
+echo '[Unit]
+Description=rclone mount
+After=network-online.target
+
+[Service]
+User=tygoe
+ExecStartPre=/bin/sleep 10
+ExecStart=/usr/bin/rclone --vfs-cache-mode writes --dir-cache-time 10s mount \"OneDrive:\" /home/tygoe/OneDrive
+
+[Install]
+WantedBy=default.target' | sudo tee /etc/systemd/system/rclone.service
 ```
 
 ... (WIP)

@@ -11,7 +11,7 @@ sudo apt install -y pulseaudio network-manager-gnome ibus
 sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion
 
 # Other apps
-sudo apt install -y rclone feh obs-studio copyq
+sudo apt install -y rclone feh obs-studio copyq gdebi thunderbird
 
 # VSCode
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc
@@ -21,10 +21,12 @@ sudo apt update # Update the package list
 # Programming
 sudo apt install -y python3-pip python3-venv git code
 
-cd ~/Downloads || null
+# Some non-default-apt apps
+wget https://vault.bitwarden.com/download/?app=desktop\&platform=linux\&variant=deb -O ~/Downloads/bitwarden.deb
+sudo apt install -y ~/Downloads/bitwarden.deb
 
-wget "https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb" -O bitwarden.deb
-sudo apt install ./bitwarden.deb -y
+wget https://discord.com/api/download?platform=linux\&format=deb -O ~/Downloads/Minecraft.deb
+sudo apt install -y ~/Downloads/Minecraft.deb
 
-wget https://dl.discordapp.net/apps/linux/0.0.32/discord-0.0.32.deb -O discord.deb
-sudo apt install ./discord.deb -y
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+sudo apt install -y speedtest
