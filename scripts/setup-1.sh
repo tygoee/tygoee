@@ -15,7 +15,7 @@ After=network-online.target
 [Service]
 User=tygoe
 ExecStartPre=/bin/sleep 10
-ExecStart=/usr/bin/rclone --vfs-cache-mode writes --dir-cache-time 10s mount \"OneDrive:\" /home/tygoe/OneDrive
+ExecStart=/usr/bin/rclone --vfs-cache-mode writes --dir-cache-time 10s mount "OneDrive:" /home/tygoe/OneDrive
 
 [Install]
 WantedBy=default.target' | sudo tee /etc/systemd/system/rclone.service
