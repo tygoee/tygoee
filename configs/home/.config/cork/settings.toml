@@ -1,0 +1,36 @@
+[cork]
+launcher = ''
+loglevel = 'info'
+
+    [cork.env]
+
+[player]
+channel = 'zavatarteam2'
+version = ''
+
+    [player.env]
+
+    [player.fflags]
+
+    [player.launcher]
+    post = ''
+    pre = ''
+
+[studio]
+channel = ''
+version = ''
+
+    [studio.env]
+
+    [studio.fflags]
+
+    [studio.launcher]
+    post = ''
+    pre = ''
+
+[wine]
+dist = '/home/tygoe/.local/lib/lutris-GE-Proton8-22-x86_64/'
+type = 'wine64'
+
+    [wine.env]
+    WINEDLLOVERRIDES = 'winemenubuilder.exe=d'
