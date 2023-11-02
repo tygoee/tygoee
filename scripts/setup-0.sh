@@ -9,8 +9,8 @@ sudo cp -r tygoee/configs/root/. /root/
 
 # -- Setup openbox -- #
 # Install the theme
-mkdir -p ~/.themes
-git clone https://github.com/ju1464/E5150_Themes ~/.themes/
+git clone https://github.com/ju1464/E5150_Themes
+cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 
 # Download the image
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
@@ -44,5 +44,5 @@ sudo systemctl enable NetworkManager.service
 
 # -- Install nvidia drivers (last thing before reboot) -- #
 sudo add-apt-repository contrib non-free -y
-sudo apt install -y nvidia-drivers
+sudo apt install -y nvidia-driver
 /sbin/reboot

@@ -1,55 +1,75 @@
 #!/bin/bash
 
-# Browser, terminal, file manager
-sudo apt install -y firefox-esr alacritty thunar
+apps=(
+    # Browser, terminal, file manager
+    firefox-esr alacritty thunar
 
-# Taskbar
-sudo apt install -y tint2 volumeicon-alsa cbatticon
+    # Taskbar
+    tint2 volumeicon-alsa cbatticon
 
-# Drivers and compatibility
-sudo apt install -y pulseaudio network-manager-gnome ibus
-sudo apt install -y xdg-utils psmisc pkexec xdotool ca-certificates pavucontrol wget curl software-properties-common at-spi2-core bash-completion
+    # Drivers
+    pulseaudio network-manager-gnome ibus
 
-# Other apps
-sudo apt install -y rclone feh obs-studio copyq gdebi thunderbird
+    # For compatibility
+    xdg-utils psmisc pkexec xdotool ca-certificates ca-certificates-java
+    pavucontrol wget curl software-properties-common at-spi2-core
+    bash-completion picom debian-keyring debian-archive-keyring apt-transport-https
 
-# VSCode
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc
-sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
-sudo apt update # Update the package list
+    # Other apps
+    feh obs-studio copyq gdebi thunderbird speedtest
+    ~/Downloads/bitwarden.deb ~/Downloads/discord.deb ~/Downloads/Minecraft.deb
 
-# Programming
-sudo apt install -y python3-pip python3-venv git code
+    # Programming
+    python3-pip python3-venv git code
 
-# Some non-default-apt apps
-wget https://vault.bitwarden.com/download/?app=desktop\&platform=linux\&variant=deb -O ~/Downloads/bitwarden.deb
-sudo apt install -y ~/Downloads/bitwarden.deb
+    # Wine
+    winehq-stable
 
-wget https://discord.com/api/download?platform=linux\&format=deb -O ~/Downloads/Minecraft.deb
-sudo apt install -y ~/Downloads/Minecraft.deb
+    # Cork
+    build-essential cmake
+    libboost-all-dev libzip-dev zlib1g-dev libbz2-dev liblzma-dev
+    libssl-dev curl libcurl4-openssl-dev liblua5.4-dev
+)
 
-curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
-sudo apt install -y speedtest
+# Install the needed dependencies
+sudo apt install -y software-properties-common wget curl
 
-# Wine
+# Add Wine
 sudo dpkg --add-architecture i386
 sudo mkdir -pm755 /etc/apt/keyrings
-sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bullseye/winehq-bullseye.sources
-sudo apt update
+sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bullseye/winehq-bullseye.sources
 
-sudo apt install --install-recommends winehq-stable
+# Add VSCode
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc &>/dev/null
+sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
+# Add some other non-default-apt apps
+echo -n "Downloading bitwarden... "
+wget -q https://vault.bitwarden.com/download/?app=desktop\&platform=linux\&variant=deb -O ~/Downloads/bitwarden.deb
+
+echo -en "Done\nDownloading discord... "
+wget -q https://discord.com/api/download?platform=linux\&format=deb -O ~/Downloads/discord.deb
+
+echo -en "Done\nDownloading minecraft... "
+wget -q https://launcher.mojang.com/download/Minecraft.deb -P ~/Downloads/
+
+echo -en "Done\nDownloading speedtest-cli... Done\nUpdating package lists... "
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash &>/dev/null
+echo "Done"
+
+# shellcheck disable=SC2068
+sudo apt install ${apps[@]}
 
 # Proton
 mkdir -p ~/.local/lib/
 wget -P ~/.local/lib/ https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton8-22/wine-lutris-GE-Proton8-22-x86_64.tar.xz
+echo "Extracting lutris-GE-Proton8-22-x86_64..."
 tar -xJf ~/.local/lib/wine-lutris-GE-Proton8-22-x86_64.tar.xz -C ~/.local/lib/
 
 # Cork
-sudo apt install git build-essential cmake
-sudo apt install libboost-all-dev libzip-dev zlib1g-dev libbz2-dev liblzma-dev libssl-dev curl libcurl4-openssl-dev liblua5.4-dev
 git clone https://github.com/CorkHQ/Cork.git
-cd Cork || :
+cd Cork || exit 1
 mkdir build
 cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCPR_USE_SYSTEM_CURL=ON
 cd build || :

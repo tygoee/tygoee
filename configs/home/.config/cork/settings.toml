@@ -5,7 +5,7 @@ loglevel = 'info'
     [cork.env]
 
 [player]
-channel = 'zavatarteam2'
+channel = ''
 version = ''
 
     [player.env]
