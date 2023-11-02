@@ -26,12 +26,13 @@ sudo systemctl enable rclone.service
 sudo systemctl start rclone.service
 
 # -- Setup Git -- #
-# Ask for the signing key
-echo "Git Signing key:"
-read -r signing_key
-
 # Configure git
 git config --global user.name "tygoee"
 git config --global user.email "tygoee@outlook.com"
-git config --global user.signingkey "$signing_key"
 git config --global commit.gpgsign true
+
+echo "Make sure to create a signing key and add it:"
+echo "  gpg --full-generate-key"
+echo "  gpg --list-secret-keys --keyid-format=long"
+echo "  gpg --armor --export YOUR_SIGNING_KEY"
+echo "  git config --global user.signingkey YOUR_SIGNING_KEY"
