@@ -66,8 +66,8 @@ If you want to do it manually anyway, continue. Otherwise, you're done :)
 Copy all config files first:
 
 ```shell
-cp -r tygoee/configs/home/. ~/
-sudo cp -r tygoee/configs/root/. /root/
+cp -r ./configs/home/. ~/
+sudo cp -r ./configs/root/. /root/
 ```
 
 Then, to make shutdown and reboot available to all users:
@@ -86,6 +86,7 @@ ln -s /sbin/reboot /bin/reboot
 
 ```shell
 # Install the theme
+mkdir -p ~/.themes/
 git clone https://github.com/ju1464/E5150_Themes
 cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 
@@ -93,7 +94,7 @@ cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
 
 # Use the enhanced obamenu (backup the existing one)
-sudo cp tygoee/scripts/obamenu /usr/bin/obamenu
+sudo cp ./scripts/obamenu /usr/bin/obamenu
 
 # Setup 'tap to click'
 mkdir -p /etc/X11/xorg.conf.d

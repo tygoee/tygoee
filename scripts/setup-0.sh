@@ -18,6 +18,7 @@ sudo cp -r ./configs/root/. /root/
 
 # -- Setup openbox -- #
 # Install the theme
+mkdir -p ~/.themes/
 git clone https://github.com/ju1464/E5150_Themes
 cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 
