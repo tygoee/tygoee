@@ -39,6 +39,7 @@ First, clone the git repo:
 ```shell
 sudo apt install git
 git clone https://github.com/tygoee/tygoee
+cd tygoee
 ```
 
 Then install all packages. You can use [`scripts/install_pkgs.sh`](../scripts/install_pkgs.sh) to install all packages automatically:

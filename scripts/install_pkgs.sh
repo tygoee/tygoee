@@ -49,6 +49,9 @@ snap_apps=(
 # Install the needed dependencies
 sudo apt install -y software-properties-common wget curl gnupg2
 
+# Make the Downloads dir
+mkdir -p ~/Downloads
+
 # Add Wine
 sudo dpkg --add-architecture i386
 sudo mkdir -pm755 /etc/apt/keyrings
