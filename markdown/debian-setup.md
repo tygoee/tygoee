@@ -32,14 +32,6 @@ sudo adduser tygoe sudo
 su tygoe
 ```
 
-## Make shutdown and reboot available
-
-```shell
-sudo nano /etc/profile #- Add /sbin to PATH
-sudo chown root:root /sbin/reboot /sbin/shutdown
-sudo chmod +s /sbin/reboot /sbin/shutdown
-```
-
 ## Install all packages
 
 First, clone the git repo:
@@ -59,6 +51,17 @@ Reboot for some of these to complete their installation
 
 ## Configure the packages
 
+Now, configure all these apps automatically using [`scripts/setup-0.sh`](../scripts/setup-0.sh). If that's done, it will reboot and you need to execute [`scripts/setup-1.sh`](../scripts/setup-1.sh):
+
+```shell
+./scripts/setup-0.sh
+./scripts/setup-1.sh
+```
+
+If you want to do it manually anyway, continue. Otherwise, you're done :)
+
+---
+
 Copy all config files first:
 
 ```shell
@@ -66,18 +69,24 @@ cp -r tygoee/configs/home/. ~/
 sudo cp -r tygoee/configs/root/. /root/
 ```
 
-Now, configure all these apps or do it automatically using [`scripts/setup-0.sh`](../scripts/setup-0.sh):
+Then, to make shutdown and reboot available to all users:
 
 ```shell
-./scripts/setup-0.sh
+# Add the necesarry permissions
+sudo chown root:root /sbin/reboot /sbin/shutdown
+sudo chmod +s /sbin/reboot /sbin/shutdown
+
+# Make symlinks
+ln -s /sbin/shutdown /bin/shutdown
+ln -s /sbin/reboot /bin/reboot
 ```
 
 ### _openbox_
 
 ```shell
 # Install the theme
-mkdir -p ~/.themes
-git clone https://github.com/ju1464/E5150_Themes ~/.themes/
+git clone https://github.com/ju1464/E5150_Themes
+cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 
 # Download the image
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
@@ -85,7 +94,7 @@ wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden
 # Use the enhanced obamenu (backup the existing one)
 sudo cp tygoee/scripts/obamenu /usr/bin/obamenu
 
-# Enable 'tap to click'
+# Setup 'tap to click'
 mkdir -p /etc/X11/xorg.conf.d
 echo 'Section "InputClass"
         Identifier "libinput touchpad catchall"
@@ -94,31 +103,29 @@ echo 'Section "InputClass"
         Driver "libinput"
         Option "Tapping" "on"
 EndSection' | sudo tee /etc/X11/xorg.conf.d/40-libinput.conf
+
+# Make a screenshots directory
+mkdir -p ~/Pictures/Screenshots
 ```
 
 ### _alacritty_
 
 ```shell
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50
-sudo update-alternatives --config x-terminal-emulator
+sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
 ```
 
-### _network_manager_
+### _gdebi_
+
+```shell
+sudo sed -i 's/^Exec=gdebi-gtk %f$/Exec=sh -c "gdebi-gtk %f"/' /usr/share/applications/gdebi.desktop
+```
+
+### _network-manager_
 
 ```shell
 sudo sed -i 's/^/# /' "/etc/network/interfaces"
 sudo systemctl enable NetworkManager.service
-reboot
-nmtui #- Connect the network
-```
-
-### _git_
-
-```shell
-git config --global user.name tygoee
-git config --global user.email tygoee@outlook.com
-git config --global user.signingkey YOUR_SIGNING_KEY
-git config --global commit.gpgsign true
 ```
 
 ### _nvidia-driver_
@@ -145,6 +152,15 @@ ExecStart=/usr/bin/rclone --vfs-cache-mode writes --dir-cache-time 10s mount \"O
 
 [Install]
 WantedBy=default.target' | sudo tee /etc/systemd/system/rclone.service
+```
+
+### _git_
+
+```shell
+git config --global user.name tygoee
+git config --global user.email tygoee@outlook.com
+git config --global user.signingkey YOUR_SIGNING_KEY
+git config --global commit.gpgsign true
 ```
 
 ... (WIP)

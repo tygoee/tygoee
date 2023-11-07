@@ -3,6 +3,15 @@
 # Before this, run install_pkgs.sh
 #
 
+# -- Make shutdown and reboot available -- #
+# Add the necesarry permissions
+sudo chown root:root /sbin/reboot /sbin/shutdown
+sudo chmod +s /sbin/reboot /sbin/shutdown
+
+# Make symlinks
+ln -s /sbin/shutdown /bin/shutdown
+ln -s /sbin/reboot /bin/reboot
+
 # -- Copy all the config files -- #
 cp -r tygoee/configs/home/. ~/
 sudo cp -r tygoee/configs/root/. /root/
@@ -27,6 +36,9 @@ echo 'Section "InputClass"
         Driver "libinput"
         Option "Tapping" "on"
 EndSection' | sudo tee /etc/X11/xorg.conf.d/40-libinput.conf
+
+# Make a screenshots directory
+mkdir -p ~/Pictures/Screenshots
 
 # -- Setup alacritty -- #
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50
