@@ -29,10 +29,14 @@ apps=(
     build-essential cmake
     libboost-all-dev libzip-dev zlib1g-dev libbz2-dev liblzma-dev
     libssl-dev curl libcurl4-openssl-dev liblua5.4-dev
+
+    # VirtualBox
+    lsb-release "linux-headers-$(uname -r)" dkms
+    virtualbox-7.0
 )
 
 # Install the needed dependencies
-sudo apt install -y software-properties-common wget curl
+sudo apt install -y software-properties-common wget curl gnupg2
 
 # Add Wine
 sudo dpkg --add-architecture i386
@@ -43,6 +47,11 @@ sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian
 # Add VSCode
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft-archive-keyring.asc &>/dev/null
 sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
+# Add Virtualbox
+curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/vbox.gpg
+curl -fsSL https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg
+echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list &>/dev/null
 
 # Add some other non-default-apt apps
 echo -n "Downloading bitwarden... "
@@ -59,7 +68,7 @@ curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.
 echo "Done"
 
 # shellcheck disable=SC2068
-sudo apt install ${apps[@]}
+sudo apt install -y ${apps[@]}
 
 # Proton
 mkdir -p ~/.local/lib/
