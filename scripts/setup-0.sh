@@ -15,9 +15,6 @@ cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 # Download the image
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
 
-# Add WINIT_SCALE_FACTOR to ~/.profile
-echo -e "\nexport WINIT_X11_SCALE_FACTOR=1.66" >> ~/.profile
-
 # Use the enhanced obamenu (backup the existing one)
 sudo cp tygoee/scripts/obamenu /usr/bin/obamenu
 

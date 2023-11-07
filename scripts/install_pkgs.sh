@@ -1,6 +1,9 @@
 #!/bin/bash
 
-apps=(
+apt_apps=(
+    # Xorg and openbox
+    xorg openbox
+
     # Browser, terminal, file manager
     firefox-esr alacritty thunar
 
@@ -10,13 +13,16 @@ apps=(
     # Drivers
     pulseaudio network-manager-gnome ibus
 
-    # For compatibility
+    # For compatibility and possibly uninstalled
     xdg-utils psmisc pkexec xdotool ca-certificates ca-certificates-java
-    pavucontrol wget curl software-properties-common at-spi2-core
-    bash-completion picom debian-keyring debian-archive-keyring apt-transport-https
+    wget curl software-properties-common at-spi2-core snapd
+    debian-keyring debian-archive-keyring apt-transport-https
+
+    # Some nice features
+    bash-completion picom command-not-found
 
     # Other apps
-    feh obs-studio copyq gdebi thunderbird speedtest
+    feh obs-studio copyq gdebi thunderbird speedtest pavucontrol
     ~/Downloads/bitwarden.deb ~/Downloads/discord.deb ~/Downloads/Minecraft.deb
 
     # Programming
@@ -35,6 +41,11 @@ apps=(
     virtualbox-7.0
 )
 
+snap_apps=(
+    # Whatsapp
+    whatsdesk
+)
+
 # Install the needed dependencies
 sudo apt install -y software-properties-common wget curl gnupg2
 
@@ -49,8 +60,8 @@ wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/
 sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 
 # Add Virtualbox
-curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/vbox.gpg
-curl -fsSL https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg
+curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/vbox.gpg
+curl -fsSL https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg
 echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list &>/dev/null
 
 # Add some other non-default-apt apps
@@ -67,8 +78,8 @@ echo -en "Done\nDownloading speedtest-cli... Done\nUpdating package lists... "
 curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash &>/dev/null
 echo "Done"
 
-# shellcheck disable=SC2068
-sudo apt install -y ${apps[@]}
+sudo apt install -y "${apt_apps[@]}"
+sudo snap install "${snap_apps[@]}"
 
 # Proton
 mkdir -p ~/.local/lib/
