@@ -39,6 +39,9 @@ apt_apps=(
     # VirtualBox
     lsb-release "linux-headers-$(uname -r)" dkms
     virtualbox-7.0
+
+    # Nvidia Driver
+    nvidia-driver
 )
 
 snap_apps=(
@@ -81,6 +84,7 @@ echo -en "Done\nDownloading speedtest-cli... Done\nUpdating package lists... "
 curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash &>/dev/null
 echo "Done"
 
+sudo add-apt-repository contrib non-free -y
 sudo apt install -y "${apt_apps[@]}"
 sudo snap install "${snap_apps[@]}"
 

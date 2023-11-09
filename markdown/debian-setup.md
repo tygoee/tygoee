@@ -158,17 +158,27 @@ WantedBy=default.target' | sudo tee /etc/systemd/system/rclone.service
 
 ### _git_
 
+First, make a gpg key and add it to your github account:
+
 ```shell
-git config --global user.name tygoee
-git config --global user.email tygoee@outlook.com
+# Generate a key
+gpg --full-generate-key
+
+# Print your gpg key
+gpg --list-secret-keys --keyid-format=long
+
+# Export your public gpg key
+gpg --armor --export YOUR_SIGNING_KEY
+```
+
+```shell
+# Set the username and email
+git config --global user.name USERNAME
+git config --global user.email EMAIL
+
+# Set the signing key and enable it
 git config --global user.signingkey YOUR_SIGNING_KEY
 git config --global commit.gpgsign true
 ```
 
-... (WIP)
-
-<!-- How I installed from gnome-look.org:
-mkdir -p ~/.themes/
-curl -Lfs https://www.gnome-look.org/p/1330547/loadFiles | jq -r '.files | first.version as $v | .[] | select(.version == $v).url' | perl -pe 's/\%(\w\w)/chr hex $1/ge' | grep "E5150-Blue" | xargs wget
-tar -xf E5150-Blue.tar.gz -C ~/.themes/
--->
+And you're done :)

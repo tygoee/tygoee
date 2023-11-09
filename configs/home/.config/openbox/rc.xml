@@ -296,7 +296,7 @@
     <!-- Take a screenshot of the current window with scrot when Alt+Print are pressed -->
     <keybind key="W-Print">
       <action name="Execute">
-        <command>scrot -s '/home/tygoe/Pictures/Screenshots/%Y-%m-%d-%H%M%S_$wx$h.png'</command>
+        <command>scrot -s '~/Pictures/Screenshots/%Y-%m-%d-%H%M%S_$wx$h.png'</command>
       </action>
     </keybind>
     <!-- Keybindings for window switching -->
@@ -362,13 +362,13 @@
     </keybind> -->
     <keybind key="W-p">
       <action name="Execute">
-        <command>/home/tygoe/.config/openbox/monitors.sh</command>
+        <command>~/.config/openbox/monitors.sh</command>
       </action>
     </keybind>
     <!-- Launch scrot when Print is pressed -->
     <keybind key="Print">
       <action name="Execute">
-        <command>scrot '/home/tygoe/Pictures/Screenshots/%Y-%m-%d-%H%M%S_$wx$h.png'</command>
+        <command>scrot '~/Pictures/Screenshots/%Y-%m-%d-%H%M%S_$wx$h.png'</command>
       </action>
     </keybind>
     <keybind key="W-A-r">
