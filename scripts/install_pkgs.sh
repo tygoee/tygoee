@@ -45,8 +45,7 @@ apt_apps=(
 )
 
 snap_apps=(
-    # Whatsapp
-    whatsdesk
+    whatsdesk p7zip-desktop
 )
 
 # Install the needed dependencies
