@@ -26,7 +26,7 @@ apt_apps=(
     ~/Downloads/bitwarden.deb ~/Downloads/discord.deb ~/Downloads/Minecraft.deb
 
     # Programming
-    python3-pip python3-venv git code github-desktop
+    python3.12 python3-pip python3-venv git code github-desktop
 
     # Wine
     winehq-stable
@@ -49,7 +49,7 @@ snap_apps=(
 )
 
 # Install the needed dependencies
-sudo apt install -y software-properties-common wget curl gnupg2
+sudo apt install -y software-properties-common wget curl gnupg2 python3-launchpadlib
 
 # Make the Downloads dir
 mkdir -p ~/Downloads
@@ -71,6 +71,9 @@ sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/shiftkey-package
 curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/vbox.gpg
 curl -fsSL https://www.virtualbox.org/download/oracle_vbox.asc | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg
 echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list &>/dev/null
+
+# Add python
+sudo add-apt-repository -S 'deb https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main'
 
 # Add some other non-default-apt apps
 echo -n "Downloading bitwarden... "
