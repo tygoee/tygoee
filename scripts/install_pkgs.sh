@@ -1,11 +1,18 @@
 #!/bin/bash
 
+pre_install=(
+    # Packages needed to prepare the installation
+    software-properties-common wget curl gnupg2
+    python3-launchpadlib lsb-release
+    apt-transport-https ca-certificates
+)
+
 apt_apps=(
     # Xorg and openbox
     xorg openbox
 
     # Browser, terminal, file manager
-    firefox-esr alacritty thunar
+    librewolf alacritty thunar
 
     # Taskbar
     tint2 volumeicon-alsa cbatticon
@@ -14,9 +21,8 @@ apt_apps=(
     pulseaudio network-manager-gnome ibus
 
     # For compatibility and possibly uninstalled
-    xdg-utils psmisc pkexec xdotool ca-certificates ca-certificates-java
-    wget curl software-properties-common at-spi2-core snapd
-    debian-keyring debian-archive-keyring apt-transport-https
+    xdg-utils psmisc pkexec xdotool ca-certificates-java
+    at-spi2-core snapd debian-keyring debian-archive-keyring
 
     # Some nice features
     bash-completion picom command-not-found
@@ -34,10 +40,10 @@ apt_apps=(
     # Cork
     build-essential cmake
     libboost-all-dev libzip-dev zlib1g-dev libbz2-dev liblzma-dev
-    libssl-dev curl libcurl4-openssl-dev liblua5.4-dev
+    libssl-dev libcurl4-openssl-dev liblua5.4-dev
 
     # VirtualBox
-    lsb-release "linux-headers-$(uname -r)" dkms
+    "linux-headers-$(uname -r)" dkms
     virtualbox-7.0
 
     # Nvidia Driver
@@ -49,10 +55,22 @@ snap_apps=(
 )
 
 # Install the needed dependencies
-sudo apt install -y software-properties-common wget curl gnupg2 python3-launchpadlib
+sudo apt install -y "${pre_install[@]}"
 
 # Make the Downloads dir
 mkdir -p ~/Downloads
+
+# Add Librewolf
+distro=$(if echo " una bookworm vanessa focal jammy bullseye vera uma " | grep -q " $(lsb_release -sc) "; then lsb_release -sc; else echo focal; fi)
+wget -O- https://deb.librewolf.net/keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/librewolf.gpg
+sudo tee /etc/apt/sources.list.d/librewolf.sources << EOF > /dev/null
+Types: deb
+URIs: https://deb.librewolf.net
+Suites: $distro
+Components: main
+Architectures: amd64
+Signed-By: /usr/share/keyrings/librewolf.gpg
+EOF
 
 # Add Wine
 sudo dpkg --add-architecture i386

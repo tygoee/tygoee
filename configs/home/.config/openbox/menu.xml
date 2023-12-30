@@ -13,7 +13,7 @@
     <action name="Execute"><execute>alacritty</execute></action>
   </item>
   <item label="Web browser">
-    <action name="Execute"><execute>firefox-esr</execute></action>
+    <action name="Execute"><execute>librewolf</execute></action>
   </item>
   <!-- This requires the presence of the 'obamenu' package to work -->
   <separator />
