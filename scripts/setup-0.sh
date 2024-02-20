@@ -9,8 +9,8 @@ sudo chown root:root /sbin/reboot /sbin/shutdown
 sudo chmod +s /sbin/reboot /sbin/shutdown
 
 # Make symlinks
-ln -s /sbin/shutdown /bin/shutdown
-ln -s /sbin/reboot /bin/reboot
+sudo ln -s /sbin/shutdown /bin/shutdown
+sudo ln -s /sbin/reboot /bin/reboot
 
 # -- Copy all the config files -- #
 cp -r ./configs/home/. ~/
@@ -26,8 +26,10 @@ cp -r E5150_Themes/GTK-Gnome/E5150-Blue/ ~/.themes/
 wget -O ~/.config/openbox/background.jpg https://wallpapers.com/images/hd/golden-peak-mountain-k4xggmniraiyie6h.jpg --user-agent="Mozilla"
 
 # Use the enhanced obamenu (backup the existing one)
+sudo mv /usr/bin/obamenu /usr/bin/_obamenu
 sudo cp ./scripts/obamenu /usr/bin/obamenu
 
+# -- Setup the rest -- #
 # Setup 'tap to click'
 mkdir -p /etc/X11/xorg.conf.d
 echo 'Section "InputClass"
@@ -51,6 +53,9 @@ sudo sed -i 's/^Exec=gdebi-gtk %f$/Exec=sh -c "gdebi-gtk %f"/' /usr/share/applic
 # -- Setup NetworkManager -- #
 sudo sed -i 's/^/# /' "/etc/network/interfaces"
 sudo systemctl enable NetworkManager.service
+
+# Enable policykit
+sudo sed -i '/^OnlyShowIn=/s/^/#/' /etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
 
 # -- Reboot -- #
 /sbin/reboot

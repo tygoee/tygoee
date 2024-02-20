@@ -1,9 +1,6 @@
 #!/bin/bash
 
 apt_apps=(
-    # Xorg and openbox
-    xorg openbox
-
     # Browser, terminal, file manager
     librewolf alacritty thunar
 
