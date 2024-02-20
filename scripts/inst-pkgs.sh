@@ -1,8 +1,8 @@
 #!/bin/bash
 
 apt_apps=(
-    # Browser, terminal, file manager
-    librewolf alacritty thunar
+    # Terminal and file manager
+    alacritty thunar
 
     # Taskbar
     tint2 volumeicon-alsa cbatticon
@@ -18,7 +18,7 @@ apt_apps=(
     bash-completion picom command-not-found
 
     # Other apps
-    feh obs-studio copyq gdebi thunderbird speedtest pavucontrol
+    feh obs-studio copyq gdebi thunderbird pavucontrol
 
     # Programming
     python3-pip python3-venv git

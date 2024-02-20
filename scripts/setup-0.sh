@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Before this, run install_pkgs.sh
+# Before this, run ./inst-pkgs.sh and ./install/*
+# and make sure you're in the root github directory
 #
 
 # -- Make shutdown and reboot available -- #
@@ -13,8 +14,8 @@ sudo ln -s /sbin/shutdown /bin/shutdown
 sudo ln -s /sbin/reboot /bin/reboot
 
 # -- Copy all the config files -- #
-cp -r ./configs/home/. ~/
-sudo cp -r ./configs/root/. /root/
+cp -r ./configs/debian/home/. ~/
+sudo cp -r ./configs/debian/root/. /root/
 
 # -- Setup openbox -- #
 # Install the theme
@@ -43,6 +44,9 @@ EndSection' | sudo tee /etc/X11/xorg.conf.d/40-libinput.conf
 # Make a screenshots directory
 mkdir -p ~/Pictures/Screenshots
 
+# Enable dark theme for some apps
+sudo echo "GTK_THEME=Adwaita:dark" | sudo tee /etc/environment
+
 # -- Setup alacritty -- #
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50
 sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
@@ -54,7 +58,7 @@ sudo sed -i 's/^Exec=gdebi-gtk %f$/Exec=sh -c "gdebi-gtk %f"/' /usr/share/applic
 sudo sed -i 's/^/# /' "/etc/network/interfaces"
 sudo systemctl enable NetworkManager.service
 
-# Enable policykit
+# -- Enable policykit -- #
 sudo sed -i '/^OnlyShowIn=/s/^/#/' /etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
 
 # -- Reboot -- #
