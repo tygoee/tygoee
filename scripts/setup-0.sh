@@ -52,5 +52,5 @@ sudo sed -i 's/^Exec=gdebi-gtk %f$/Exec=sh -c "gdebi-gtk %f"/' /usr/share/applic
 sudo sed -i 's/^/# /' "/etc/network/interfaces"
 sudo systemctl enable NetworkManager.service
 
-# -- Reboot (required for f.e. nvidia-drivier) -- #
+# -- Reboot -- #
 /sbin/reboot
