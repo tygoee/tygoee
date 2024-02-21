@@ -7,7 +7,7 @@
 feh --bg-fill ~/.config/openbox/background.jpg
 
 # Load the compositor
-picom &
+picom -i 0.85 --active-opacity 0.9 &
 
 # Load the taskbar and tray icons
 tint2 &
