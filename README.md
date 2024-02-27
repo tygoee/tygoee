@@ -3,7 +3,7 @@
 Programming is just my hobby :) I post
 personal projects on here, feel free to look around.
 
-Email: [tygoee@outlook.com](mailto:tygoee@outlook.com)
+Email: [tygoee@outlook.com](mailto:tygoee@outlook.com)  
 Discord: [@tygoe](https://discord.com/users/827499956394786826)
 
 <!--
