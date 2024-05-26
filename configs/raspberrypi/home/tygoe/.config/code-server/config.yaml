@@ -1,0 +1,6 @@
+bind-addr: 127.0.0.1:9200
+auth: password
+password: 71bb2c0c72b3431926dbe8d3
+cert: false
+user-data-dir: /home/tygoe/.vscode-server/data/
+extensions-dir: /home/tygoe/.vscode-server/extensions/
