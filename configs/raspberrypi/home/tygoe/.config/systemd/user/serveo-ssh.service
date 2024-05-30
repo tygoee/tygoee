@@ -1,0 +1,11 @@
+[Unit]
+Description=Serveo SSH
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/ssh -R tygoe:22:localhost:22 serveo.net
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

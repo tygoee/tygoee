@@ -1,0 +1,12 @@
+[Unit]
+Description=Start smapp
+After=network.target
+
+[Service]
+WorkingDirectory=/home/tygoe/Documents/smapp
+ExecStart=/home/tygoe/Documents/smapp/.venv/bin/python /home/tygoe/Documents/smapp/server.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
