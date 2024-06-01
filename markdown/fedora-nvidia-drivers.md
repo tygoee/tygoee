@@ -1,4 +1,4 @@
-I couldn't trace back where on reddit I found this, but it was in my bash history:
+From <https://www.tecmint.com/install-nvidia-drivers-in-linux/>
 
 1. First exit gnome-software. To install the repositories and fetch them, run these commands:
 
@@ -8,5 +8,11 @@ sudo dnf groupupdate core
 ```
 
 2. The drivers should show in the Software Center. Install 'Nvidia Linux Graphics driver' (without a specified version, such as `470xx` or `390xx`)
+ 
+   > If they don't show up, install `akmod-nvidia-3`
 
 3. Reboot to apply the drivers
+
+   > When the drivers don't work, try to install
+   > `kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig`
+   > and reinstall the nvidia driver
