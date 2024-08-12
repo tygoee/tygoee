@@ -1,0 +1,11 @@
+[Unit]
+Description=Start playit
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/playit
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

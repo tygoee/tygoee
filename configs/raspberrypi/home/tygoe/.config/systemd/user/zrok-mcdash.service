@@ -1,0 +1,12 @@
+[Unit]
+Description=Start sharing mcdash over zrok
+After=network.target
+
+[Service]
+WorkingDirectory=/home/tygoe/Documents/mcserver
+ExecStart=/usr/bin/zrok share reserved mcdash --headless
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

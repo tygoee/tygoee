@@ -1,0 +1,13 @@
+[Unit]
+Description=Start the minecraft server
+After=network.target
+
+[Service]
+WorkingDirectory=/home/tygoe/Documents/mcserver
+ExecStart=/usr/bin/screen -DmS mcserver /usr/bin/java -Xmx4G -Xms4G -jar /home/tygoe/Documents/mcserver/server.jar
+ExecStop=/usr/bin/screen -S mcserver -X quit
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
